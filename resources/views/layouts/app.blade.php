@@ -3,7 +3,7 @@
 
 <head>
 
-@include('layouts.pertials.head')
+@include('layouts.partials.head')
 
 </head>
 
@@ -41,7 +41,7 @@
 <!-- Right bar overlay-->
 {{--<div class="rightbar-overlay"></div>--}}
 
-@include('layouts.pertials.scripts')
+@include('layouts.partials.scripts')
 
 </body>
 </html>

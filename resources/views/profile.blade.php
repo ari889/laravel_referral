@@ -10,7 +10,7 @@
                     <button class="close" type="button" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" id="name-change" data-csrf="{{csrf_token()}}">
+                    <form method="POST" id="name-change">
                         <div class="message"></div>
                         <div class="form-group">
                             <label for="first_name">First Name</label>
@@ -34,7 +34,7 @@
                     <button class="close" type="button" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" id="change-password" data-csrf="{{csrf_token()}}" data-user_id="{{Auth::user() -> id}}">
+                    <form method="POST" id="change-password" data-user_id="{{Auth::user() -> id}}">
                         <div class="message"></div>
                         <div class="form-group">
                             <label for="old-password">Old Password</label>
@@ -48,10 +48,10 @@
                             <label for="confirm-password">Confirm Password</label>
                             <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm password." class="form-control">
                         </div>
-{{--                        <div class="form-group form-check">--}}
-{{--                            <input type="checkbox" class="form-check-input" id="exampleCheck1" checked name="check" value="true">--}}
-{{--                            <label class="form-check-label" for="exampleCheck1">Keep me logged in</label>--}}
-{{--                        </div>--}}
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1" checked name="check" value="true">
+                            <label class="form-check-label" for="exampleCheck1">Keep me logged in</label>
+                        </div>
                         <button type="submit" name="change" class="btn btn-success">Save</button>
                     </form>
                 </div>
@@ -97,10 +97,39 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-image"></i>
+                            Change profile image
+                        </div>
+                        <div class="card-body">
+                            @error('photo')
+                            <div class="alert alert-danger">{{$message}} <button type="button" data-dismiss="alert" class="close">&times;</button></div>
+                            @enderror
+                            @if(Session::has('success'))
+                                <div class="alert alert-success mx-2">{{Session::get('success')}} <button type="button" data-dismiss="alert" class="close">&times;</button></div>
+                            @endif
+                            @if(!empty(Auth::user() -> photo))
+                            <img src="{{asset('media/profileImages/'.Auth::user() -> photo)}}" alt="" class="mx-auto d-block rounded-circle" style="width: 200px;height: 200px;">
+                            @else
+                                <img src="{{asset('images/user.png')}}" alt="" class="mx-auto d-block rounded-circle" style="width: 200px;height: 200px;">
+                            @endif
+                            <form action="{{route('image.update', ['id' => Auth::user() -> id])}}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="photo" style="width: 40px;height: 40px; line-height: 40px;text-align: center;border-radius: 5px;background-color: #2D3448;" class="mx-auto d-block mt-3"><i class="fas fa-image"></i></label>
+                                    <input type="file" name="photo" id="photo" class="d-none">
+                                </div>
+                                <input type="submit" name="submit" value="Change image" class="btn btn-success d-block mx-auto">
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div> <!-- end row -->
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex flex-row justify-content-between align-content-center">
@@ -118,7 +147,7 @@
                                 <div class="col-6">{{Auth::user() -> first_name}}</div>
                             </div>
                             <div class="row">
-                                <div class="col-6">First name:</div>
+                                <div class="col-6">Last name:</div>
                                 <div class="col-6">{{Auth::user() -> last_name}}</div>
                             </div>
                         </div>
@@ -126,7 +155,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <i class="fas fa-map-marked-alt mr-3"></i>
@@ -142,20 +171,24 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <i class="fas fa-user mr-3"></i>
-                            Varified Document
+                            Verified Information
                         </div>
                         <div class="card-body">
                             <div class="row mb-4">
                                 <div class="col-6">Email:</div>
-                                <div class="col-6">jhon@gmail.com</div>
+                                <div class=" col-6">
+                                    <div class="d-flex flex-row justify-content-start align-content-center"><p class="m-0 mr-2">{{Auth::user() -> email}}</p> <i class="fas fa-check-circle text-success" style="margin-top: 5px;"></i></div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-6">Cell:</div>
-                                <div class="col-6">202-555-0157</div>
+                                <div class=" col-6">
+                                    <div class="d-flex flex-row justify-content-start align-content-center"><p class="m-0 mr-2">{{Auth::user() -> cell}}</p> <i class="fas fa-times-circle text-danger" style="margin-top: 5px;"></i></div>
+                                </div>
                             </div>
                         </div>
                     </div>

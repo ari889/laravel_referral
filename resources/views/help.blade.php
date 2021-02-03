@@ -29,16 +29,30 @@
                             <h1 class="font-weight-bold text-white">Submit a request</h1>
                         </div>
                         <div class="card-body">
-                            <form action="">
+                            @if(Session::has('success'))
+                                {{Session::get('success')}}
+                            @endif
+                            <form action="{{route('dashboard.createHelp')}}" method="post">
+                                @csrf
                                 <div class="form-group">
                                     <label for="">Subject</label>
-                                    <input type="text" id="name" class="form-control">
+                                    <input type="text" id="name" name="subject" class="form-control" value="{{old('subject')}}">
+                                    @error('subject')
+                                    <span style="color: #ec4646;font-weight: 700;margin-bottom: 20px;" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="">Message</label>
-                                    <textarea name="" id="" cols="30" rows="10" class="form-control"></textarea>
+                                    <label for="message">Message</label>
+                                    <textarea id="message" cols="30" rows="10" name="message" class="form-control">{{old('message')}}</textarea>
+                                    @error('message')
+                                    <span style="color: #ec4646;font-weight: 700;margin-bottom: 20px;" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary" name="submit">Submit</button>
                             </form>
                         </div>
                     </div>

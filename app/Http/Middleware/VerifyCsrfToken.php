@@ -12,6 +12,9 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        '/packages/create', // not for package select
+        '/password/change', // not for password change
+        '/name/change', // not for change name
+        '/register/getallusers', // not for live user registration data
     ];
 }

@@ -23,10 +23,12 @@
             <!-- end page title -->
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-12">
                     <div class="card">
+                        <div class="card-header">
+                            <h3>Your referral is</h3>
+                        </div>
                         <div class="card-body">
-                            <label for="">Your referral is</label>
                             <div class="input-group mb-3">
                                 <input type="text" class="form-control" placeholder="Referral link" aria-label="Recipient's username" aria-describedby="basic-addon2" value="{{route('packages', Auth::user() -> id)}}" id="copy-text">
                                 <div class="input-group-append">
@@ -47,8 +49,8 @@
                                 <td><h3>{{$user_data -> visit}}</h3></td>
                                 <td><h3>{{$user_data -> registered}}</h3></td>
                                 <td><h3>
-                                        @if(intval($user_data -> visit) && intval($user_data -> registered))
-                                            {{intval($user_data -> visit) / intval($user_data -> registered)}}
+                                        @if($user_data -> visit !== 0)
+                                            {{round((intval($user_data -> registered) / intval($user_data -> visit)) * 100)}}
                                         @else
                                             {{0}}
                                         @endif
@@ -61,31 +63,35 @@
             </div> <!-- end row -->
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-12">
                     <div class="card">
-                        <div class="card-body">
+                        <div class="card-header">
                             <h3>Clients</h3>
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Username</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($referral as $ru)
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>{{$ru -> first_name}} {{$ru -> last_name}}</td>
-                                    <td>{{$ru -> email}}</td>
-                                    <td>{{$ru -> username}}</td>
-                                </tr>
-                                @endforeach
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Username</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($referral as $ru)
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>{{$ru -> first_name}} {{$ru -> last_name}}</td>
+                                            <td>{{$ru -> email}}</td>
+                                            <td>{{$ru -> username}}</td>
+                                        </tr>
+                                    @endforeach
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

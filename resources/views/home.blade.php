@@ -40,7 +40,7 @@
                                             <th data-priority="2">Price</th>
                                             <th data-priority="3">Circle Days</th>
                                             <th data-priority="4">Remaining Days</th>
-                                            <th data-priority="4">Refered By</th>
+                                            <th data-priority="4">Refereed By</th>
                                             <th data-priority="5">Join at</th>
                                             <th data-priority="6">Pool Status</th>
                                         </tr>
@@ -52,9 +52,9 @@
                                             <td>{{ucfirst($data -> package_name)}}</td>
                                             <td>{{$data -> price}}</td>
                                             <td>{{$data -> circle_days}} Days</td>
-                                            <td>45 Days</td>
-                                            <td>Marrie Doe</td>
-                                            <td>{{$data -> created_at}}</td>
+                                            <td>{{ $data -> circle_days - \Carbon\Carbon::parse($data -> created_at)->diffInDays() }} Days</td>
+                                            <td>{{$data -> referral_id}}</td>
+                                            <td>{{ \Carbon\Carbon::parse($data -> created_at)->diffForHumans() }}</td>
                                             <td>{{ucfirst($data -> status)}}</td>
                                         </tr>
                                             @endforeach

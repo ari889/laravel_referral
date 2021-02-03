@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Mail\SendMail;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -28,8 +30,10 @@ class HomeController extends Controller
     public function index()
     {
         $id = Auth::user() -> id;
+
         $data = DB::table('users')
             -> join('user_packages', 'user_packages.user_id', '=', 'users.id') -> where('users.id', $id) -> get();
+
         return view('home', [
             'user_data' => $data,
         ]);
@@ -59,6 +63,22 @@ class HomeController extends Controller
         return view('help');
     }
 
+    public function createHelp(Request $request){
+        $this -> validate($request, [
+           'subject' => 'required',
+            'message' => 'required'
+        ]);
+
+        $data = array(
+            'name' => Auth::user() -> first_name.' '.Auth::user() -> last_name,
+            'message' => $request -> message,
+            'subject' => $request -> subject
+        );
+
+        Mail::to('arijitbanarjee889@gmail.com') -> send(new SendMail($data));
+        return back() -> with('success', 'Request send successfully');
+    }
+
 
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
@@ -81,12 +101,12 @@ class HomeController extends Controller
                 }else{
                     $user -> password = password_hash($request -> new_password, PASSWORD_DEFAULT);
                     $user -> update();
-                    return '<div class="alert alert-success"><strong>Success!</strong> Password updated successful. <button class="close" data-dismiss="alert" type="button">&times;</button></div>';
-//                    if($request -> is_login == true) {
-//                        return '<div class="alert alert-success"><strong>Success!</strong> Password updated successful. <button class="close" data-dismiss="alert" type="button">&times;</button></div>';
-//                    }else{
-//                        return route('logout');
-//                    }
+                    if($request -> is_login == false) {
+                        Auth::logout();
+                        return route('login');
+                    }else{
+                        return '<div class="alert alert-success"><strong>Success!</strong> Password updated successful. <button class="close" data-dismiss="alert" type="button">&times;</button></div>';
+                    }
                 }
             }else{
                 return '<div class="alert alert-warning"><strong>Warning!</strong> Password not matched. <button class="close" data-dismiss="alert" type="button">&times;</button></div>';
@@ -111,6 +131,9 @@ class HomeController extends Controller
         return '<div class="alert alert-success"><strong>Success!</strong> Data updated successful. <button class="close" data-dismiss="alert" type="button">&times;</button></div>';
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function referral(){
         $user_data = User::find(Auth::user() -> id);
         $referad_user = DB::table('user_packages')
@@ -119,5 +142,31 @@ class HomeController extends Controller
             'user_data' => $user_data,
             'referral' => $referad_user,
         ]);
+    }
+
+    public function updateImage(Request $request, $id){
+        $data = User::find($id);
+
+        $this -> validate($request, [
+           'photo' => 'required | mimes:jpeg,jpg,png,gif,png',
+        ],[
+            'photo.required' => 'Please select an image before.'
+        ]);
+
+        if($request -> hasFile('photo')){
+            $file = $request -> file('photo');
+            $unique_name = md5(time().rand()).'.'.$file -> getClientOriginalExtension();
+            $file -> move(public_path('media/profileImages'), $unique_name);
+
+            if(file_exists('media/profileImages/'.$data -> photo)){
+                unlink('media/profileImages/'.$data -> photo);
+            }
+        }
+
+        $data -> photo = $unique_name;
+        $data -> update();
+
+        return redirect() -> back() -> with('success', 'Images updated successful');
+
     }
 }

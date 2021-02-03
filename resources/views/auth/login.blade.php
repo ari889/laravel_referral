@@ -41,11 +41,12 @@
         <!--  ======================== live counter ======================== -->
         <div class="register-right">
             <div class="content">
-                <q>Changing the global welth! Connection the coommunity internationaly! The gratest decentralizer platform!</q>
+                <q>Changing the global wealth!<br>
+                connecting the community internationally!<br>The greatest decentralize platform</q>
 
                 <div class="counter">
 {{--                    <div class="countertext"><span>1</span><span>2</span><span>3</span></div>--}}
-                    <div class="countertext" id="live-register" data-csrf="{{csrf_token()}}"></div>
+                    <div class="countertext" id="live-register"></div>
                     <p>Members in countdown</p>
                 </div>
             </div>
@@ -56,7 +57,7 @@
 
 
     </section>
-{{--@endsection--}}
+@endsection
 
 {{--@extends('layouts.app')--}}
 

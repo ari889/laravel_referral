@@ -22,8 +22,10 @@ Route::post('/packages/create', [App\Http\Controllers\PackageController::class, 
 //Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'indexShow'])->name('dashboard.index');
 Route::get('/profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('dashboard.profile');
 Route::post('/password/change', [App\Http\Controllers\HomeController::class, 'passwordChange'])->name('password.change');
+Route::post('/image/update/{id}', [App\Http\Controllers\HomeController::class, 'updateImage'])->name('image.update');
 Route::post('/name/change', [App\Http\Controllers\HomeController::class, 'nameChange'])->name('name.change');
 Route::get('/help', [App\Http\Controllers\HomeController::class, 'help'])->name('dashboard.help');
+Route::post('/help/create', [App\Http\Controllers\HomeController::class, 'createHelp'])->name('dashboard.createHelp');
 Route::get('/referral', [App\Http\Controllers\HomeController::class, 'referral'])->name('dashboard.referral');
 Route::get('/pool', [App\Http\Controllers\HomeController::class, 'pool'])->name('dashboard.pool');
 Route::post('/register/getallusers', [App\Http\Controllers\PackageController::class, 'allUsers'])->name('dashboard.users');

@@ -5,7 +5,7 @@
             <div class="navbar-brand-box">
                 <a href="{{route('home')}}" class="logo logo-dark">
                                 <span class="logo-sm">
-                                    <img src="{{asset('images/logo.png')}}" alt="" height="70">
+                                    <img src="{{asset('images/logo.png')}}" alt="" height="40">
                                 </span>
                     <span class="logo-lg">
                                     <img src="{{asset('images/logo.png')}}" alt="" height="70">
@@ -14,7 +14,7 @@
 
                 <a href="{{route('home')}}" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src="{{asset('images/logo.png')}}}" alt="" height="70">
+                                    <img src="{{asset('images/logo.png')}}" alt="" height="40">
                                 </span>
                     <span class="logo-lg">
                                     <img src="{{asset('images/logo.png')}}" alt="" height="70">
@@ -235,8 +235,11 @@
             <div class="dropdown d-inline-block user-dropdown">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle header-profile-user" src="{{asset('images/users/avatar-2.jpg')}}"
-                         alt="Header Avatar">
+                    @if(!empty(Auth::user() -> photo))
+                        <img src="{{asset('media/profileImages/'.Auth::user() -> photo)}}" alt="" class="rounded-circle header-profile-user">
+                    @else
+                        <img src="{{asset('images/user.png')}}" alt="" class="rounded-circle header-profile-user">
+                    @endif
                     <span class="d-none d-xl-inline-block ml-1">{{Auth::user() -> first_name}} {{Auth::user() -> last_name}}</span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>
