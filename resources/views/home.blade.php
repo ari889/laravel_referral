@@ -4,6 +4,9 @@
 @section('main-content')
     <div class="page-content">
         <div class="container-fluid">
+            @if(Auth::user() -> mail_activation_status === 'pending')
+            <div class="alert alert-danger rounded-0">Please confirm your email address. <a href="#">Click here</a> to learn more.</div>
+            @endif
 
             <!-- start page title -->
             <div class="row">
@@ -52,8 +55,10 @@
                                             <td>{{ucfirst($data -> package_name)}}</td>
                                             <td>{{$data -> price}}</td>
                                             <td>{{$data -> circle_days}} Days</td>
-                                            <td>{{ $data -> circle_days - \Carbon\Carbon::parse($data -> created_at)->diffInDays() }} Days</td>
-                                            <td>{{$data -> referral_id}}</td>
+                                            <td>{{ //$data -> circle_days - \Carbon\Carbon::parse($data -> created_at)->diffInDays() }}- Days</td>
+                                            <td>@php
+                                                    $user = \App\Models\User::where( 'id', '=', $data -> referral_id)->first();
+                                                    @endphp {{$user->first_name}} {{$user -> last_name}}</td>
                                             <td>{{ \Carbon\Carbon::parse($data -> created_at)->diffForHumans() }}</td>
                                             <td>{{ucfirst($data -> status)}}</td>
                                         </tr>
@@ -72,26 +77,4 @@
         </div> <!-- container-fluid -->
     </div>
 @endsection
-{{--@extends('layouts.app')--}}
 
-{{--@section('content')--}}
-{{--<div class="container">--}}
-{{--    <div class="row justify-content-center">--}}
-{{--        <div class="col-md-8">--}}
-{{--            <div class="card">--}}
-{{--                <div class="card-header">{{ __('Dashboard') }}</div>--}}
-
-{{--                <div class="card-body">--}}
-{{--                    @if (session('status'))--}}
-{{--                        <div class="alert alert-success" role="alert">--}}
-{{--                            {{ session('status') }}--}}
-{{--                        </div>--}}
-{{--                    @endif--}}
-
-{{--                    {{ __('You are logged in!') }}--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}
-{{--@endsection--}}

@@ -11,7 +11,7 @@
                     <div class="package-name-wrap">
                         <div class="package-name">Pack silver</div>
                     </div>
-                    <a href="#" class="box-content" data-referral_id="{{$user_id}}" data-package_name="silver" id="select-package">
+                    <a href="#" class="box-content" data-referral_id="@if(Session::has('referral_id')) {{Session::get('referral_id')}} @endif" data-package_name="silver" id="select-package">
                         <div class="top-bar-wrap">
                             <div class="top-bar"></div>
                         </div>
@@ -31,7 +31,7 @@
                     <div class="package-name-wrap">
                         <div class="package-name">Pack gold</div>
                     </div>
-                    <a href="#" class="box-content" data-referral_id="{{$user_id}}" data-package_name="gold" id="select-package">
+                    <a href="#" class="box-content" data-referral_id="@if(Session::has('referral_id')) {{Session::get('referral_id')}} @endif" data-package_name="gold" id="select-package">
                         <div class="top-bar-wrap">
                             <div class="top-bar"></div>
                         </div>
@@ -51,7 +51,7 @@
                     <div class="package-name-wrap">
                         <div class="package-name">Pack bronze</div>
                     </div>
-                    <a href="#" class="box-content" data-referral_id="{{$user_id}}" data-package_name="bronze" id="select-package">
+                    <a href="#" class="box-content" data-referral_id="@if(Session::has('referral_id')) {{Session::get('referral_id')}} @endif" data-package_name="bronze" id="select-package">
                         <div class="top-bar-wrap">
                             <div class="top-bar"></div>
                         </div>
@@ -77,6 +77,10 @@
             </div>
         </div>
     </section>
+
+    @php
+        $scripts = ['main'];
+    @endphp
 @endsection
 
 

@@ -7,7 +7,6 @@
             <!-- Left Menu Start -->
             <ul class="metismenu list-unstyled" id="side-menu">
                 <li class="menu-title">Menu</li>
-
                 <li>
                     <a href="{{route('home')}}" class="waves-effect">
                         <i class="ri-dashboard-line"></i>

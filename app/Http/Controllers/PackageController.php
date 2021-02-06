@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class PackageController extends Controller
 {
@@ -12,18 +13,26 @@ class PackageController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function index($id){
+    public function createSession(Request $request, $id){
+        Session::forget('referral_id');
+
+        return redirect('https://mycryptopoolmirror.com/') -> with('referral_id', $id);
+    }
+
+
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function index(Request $request){
         if(Auth::user()){
             return redirect() -> route('home');
         }else{
-            $data = User::find($id);
-            if(isset($data)){
+            if($request -> session() -> has('referral_id')){
+                $data = User::find($request -> session() -> get('referral_id'));
                 $data -> visit = $data -> visit + 1;
                 $data -> update();
             }
-            return view('frontend.packages', [
-                'user_id' => $id
-            ]);
+            return view('frontend.packages');
         }
     }
 

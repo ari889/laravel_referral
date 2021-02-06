@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserPackage;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -63,6 +64,11 @@ class HomeController extends Controller
         return view('help');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function createHelp(Request $request){
         $this -> validate($request, [
            'subject' => 'required',
@@ -71,6 +77,7 @@ class HomeController extends Controller
 
         $data = array(
             'name' => Auth::user() -> first_name.' '.Auth::user() -> last_name,
+            'email' => Auth::user() -> email,
             'message' => $request -> message,
             'subject' => $request -> subject
         );
@@ -136,14 +143,20 @@ class HomeController extends Controller
      */
     public function referral(){
         $user_data = User::find(Auth::user() -> id);
-        $referad_user = DB::table('user_packages')
+        $referrad_user = DB::table('user_packages')
             -> join('users', 'user_packages.user_id', '=', 'users.id') -> where('user_packages.referral_id', Auth::user() -> id) -> get();
         return view('referral', [
             'user_data' => $user_data,
-            'referral' => $referad_user,
+            'referral' => $referrad_user,
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function updateImage(Request $request, $id){
         $data = User::find($id);
 
@@ -158,7 +171,7 @@ class HomeController extends Controller
             $unique_name = md5(time().rand()).'.'.$file -> getClientOriginalExtension();
             $file -> move(public_path('media/profileImages'), $unique_name);
 
-            if(file_exists('media/profileImages/'.$data -> photo)){
+            if(!empty($data -> photo) && file_exists('media/profileImages/'.$data -> photo)){
                 unlink('media/profileImages/'.$data -> photo);
             }
         }
@@ -167,6 +180,23 @@ class HomeController extends Controller
         $data -> update();
 
         return redirect() -> back() -> with('success', 'Images updated successful');
+
+    }
+
+    public function confirmEmail($token){
+        $data = User::where('remember_token', $token) -> get() -> first();
+        if($data -> mail_activation_status === 'pending'){
+            $data -> mail_activation_status = 'active';
+            $data -> email_verified_at = Carbon::now();
+            $data -> update();
+            return view('active', [
+                'status' => 'success'
+            ]);
+        }else{
+            return view('active', [
+                'status' => 'error'
+            ]);
+        }
 
     }
 }

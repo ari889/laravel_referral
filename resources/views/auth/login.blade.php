@@ -2,7 +2,9 @@
 
 @section('main-content')
     <section class="register">
-
+{{--        <a href="locale/bn">Bangla</a>--}}
+{{--        <a href="locale/en">English</a>--}}
+{{--        @lang('home.laravel')--}}
         <!--  ======================== sign in form ======================== -->
         <div class="register-left">
             <div class="top-bar">
@@ -57,6 +59,9 @@
 
 
     </section>
+    @php
+    $scripts = ['main', 'liveUserCounter'];
+    @endphp
 @endsection
 
 {{--@extends('layouts.app')--}}

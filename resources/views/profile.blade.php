@@ -110,15 +110,14 @@
                             @if(Session::has('success'))
                                 <div class="alert alert-success mx-2">{{Session::get('success')}} <button type="button" data-dismiss="alert" class="close">&times;</button></div>
                             @endif
-                            @if(!empty(Auth::user() -> photo))
-                            <img src="{{asset('media/profileImages/'.Auth::user() -> photo)}}" alt="" class="mx-auto d-block rounded-circle" style="width: 200px;height: 200px;">
-                            @else
-                                <img src="{{asset('images/user.png')}}" alt="" class="mx-auto d-block rounded-circle" style="width: 200px;height: 200px;">
-                            @endif
                             <form action="{{route('image.update', ['id' => Auth::user() -> id])}}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="photo" style="width: 40px;height: 40px; line-height: 40px;text-align: center;border-radius: 5px;background-color: #2D3448;" class="mx-auto d-block mt-3"><i class="fas fa-image"></i></label>
+                                    <label for="photo" class="d-block mx-auto">@if(!empty(Auth::user() -> photo))
+                                            <img src="{{asset('media/profileImages/'.Auth::user() -> photo)}}" alt="" class="mx-auto d-block rounded-circle" style="width: 200px;height: 200px;">
+                                        @else
+                                            <img src="{{asset('images/user.png')}}" alt="" class="mx-auto d-block rounded-circle" style="width: 200px;height: 200px;">
+                                        @endif</label>
                                     <input type="file" name="photo" id="photo" class="d-none">
                                 </div>
                                 <input type="submit" name="submit" value="Change image" class="btn btn-success d-block mx-auto">
@@ -181,7 +180,12 @@
                             <div class="row mb-4">
                                 <div class="col-6">Email:</div>
                                 <div class=" col-6">
-                                    <div class="d-flex flex-row justify-content-start align-content-center"><p class="m-0 mr-2">{{Auth::user() -> email}}</p> <i class="fas fa-check-circle text-success" style="margin-top: 5px;"></i></div>
+                                    <div class="d-flex flex-row justify-content-start align-content-center"><p class="m-0 mr-2">{{Auth::user() -> email}}</p>
+                                        @if(Auth::user() -> mail_activation_status === 'pending')
+                                            <i class="fas fa-times-circle text-danger" style="margin-top: 5px;"></i>
+                                        @else
+                                            <i class="fas fa-check-circle text-success" style="margin-top: 5px;"></i>
+                                        @endif</div>
                                 </div>
                             </div>
                             <div class="row">
@@ -197,27 +201,9 @@
 
         </div> <!-- container-fluid -->
     </div>
+
+    @php
+        $scripts = ['main'];
+    @endphp
 @endsection
-{{--@extends('layouts.app')--}}
 
-{{--@section('content')--}}
-{{--<div class="container">--}}
-{{--    <div class="row justify-content-center">--}}
-{{--        <div class="col-md-8">--}}
-{{--            <div class="card">--}}
-{{--                <div class="card-header">{{ __('Dashboard') }}</div>--}}
-
-{{--                <div class="card-body">--}}
-{{--                    @if (session('status'))--}}
-{{--                        <div class="alert alert-success" role="alert">--}}
-{{--                            {{ session('status') }}--}}
-{{--                        </div>--}}
-{{--                    @endif--}}
-
-{{--                    {{ __('You are logged in!') }}--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}
-{{--@endsection--}}

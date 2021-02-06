@@ -30,7 +30,7 @@
                         </div>
                         <div class="card-body">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Referral link" aria-label="Recipient's username" aria-describedby="basic-addon2" value="{{route('packages', Auth::user() -> id)}}" id="copy-text">
+                                <input type="text" class="form-control" placeholder="Referral link" aria-label="Recipient's username" aria-describedby="basic-addon2" value="{{route('packages.session', Auth::user() -> id)}}" id="copy-text">
                                 <div class="input-group-append">
                                     <button type="button" class="btn btn-success" id="copy-link">Copy</button>
                                 </div>
@@ -66,7 +66,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3>Clients</h3>
+                            <h3>Referred user</h3>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -76,16 +76,40 @@
                                         <th scope="col">#</th>
                                         <th scope="col">Name</th>
                                         <th scope="col">Email</th>
-                                        <th scope="col">Username</th>
+                                        <th scope="col">Package</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Total rewards</th>
+                                        <th scope="col">Registered at</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($referral as $ru)
                                         <tr>
-                                            <th scope="row">1</th>
-                                            <td>{{$ru -> first_name}} {{$ru -> last_name}}</td>
-                                            <td>{{$ru -> email}}</td>
-                                            <td>{{$ru -> username}}</td>
+                                            <th scope="row">{{$loop -> index + 1}}</th>
+                                            <td>@php
+                                                    $username = $ru -> username;
+                                                    $length = strlen($username) - 1;
+                                                    $new_name = substr($username, 0, 1);
+                                                    echo $new_name.str_repeat('*', $length);
+                                                    @endphp</td>
+                                            <td>@php
+                                                    $email = $ru -> email;
+                                                    $ex_email = explode('@', $email);
+                                                    $mail_name = $ex_email[0];
+                                                    $name_length = strlen($mail_name);
+                                                    $get_first_letter = substr($mail_name, 0, 1);
+                                                    echo $get_first_letter.str_repeat('*', $name_length).'@';
+                                                    $mail_host = end($ex_email);
+                                                    $new_host = explode('.', $mail_host);
+                                                    $last_element = $new_host[0];
+                                                    $mail_name_length = strlen($last_element);
+                                                    $get_mail_first_letter = substr($last_element, 0 , 1);
+                                                    echo $get_mail_first_letter.str_repeat('*', $mail_name_length).'.'.end($new_host);
+                                            @endphp</td>
+                                            <td>{{$ru -> package_name}}</td>
+                                            <td>{{$ru -> price}}</td>
+                                            <td>2.1 ETH</td>
+                                            <td>{{ \Carbon\Carbon::parse($ru -> created_at)->diffForHumans() }}</td>
                                         </tr>
                                     @endforeach
 
@@ -99,27 +123,7 @@
 
         </div> <!-- container-fluid -->
     </div>
+    @php
+        $scripts = ['main'];
+    @endphp
 @endsection
-{{--@extends('layouts.app')--}}
-
-{{--@section('content')--}}
-{{--<div class="container">--}}
-{{--    <div class="row justify-content-center">--}}
-{{--        <div class="col-md-8">--}}
-{{--            <div class="card">--}}
-{{--                <div class="card-header">{{ __('Dashboard') }}</div>--}}
-
-{{--                <div class="card-body">--}}
-{{--                    @if (session('status'))--}}
-{{--                        <div class="alert alert-success" role="alert">--}}
-{{--                            {{ session('status') }}--}}
-{{--                        </div>--}}
-{{--                    @endif--}}
-
-{{--                    {{ __('You are logged in!') }}--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}
-{{--@endsection--}}

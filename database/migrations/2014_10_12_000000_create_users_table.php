@@ -24,7 +24,9 @@ class CreateUsersTable extends Migration
             $table->string('role') -> default('customer');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedInteger('referral_id');
             $table->string('status') -> default('pending');
+            $table->string('mail_activation_status') -> default('pending');
             $table->unsignedInteger('visit') -> default(0);
             $table->unsignedInteger('registered') -> default(0);
             $table->rememberToken();

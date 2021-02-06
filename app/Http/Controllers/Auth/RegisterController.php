@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\confirmMail;
 use App\Models\Package;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -68,12 +71,25 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $remember_token = md5(time().rand());
+
+        $mailData = array(
+            'name' => $data['first_name'].' '.$data['last_name'],
+            'email' => $data['email'],
+            'token' => $remember_token
+        );
+
+        Mail::to($data['email']) -> send(new confirmMail($mailData));
+
+
         return User::create([
             'username' => $data['username'],
             'email' => $data['email'],
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'cell' => $data['cell'],
+            'referral_id' => $data['referral_id'],
+            'remember_token' => $remember_token,
             'password' => Hash::make($data['password']),
         ]);
     }

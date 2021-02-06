@@ -45,6 +45,10 @@
 
 
     </section>
+
+    @php
+        $scripts = ['main', 'liveUserCounter'];
+    @endphp
 @endsection
 
 

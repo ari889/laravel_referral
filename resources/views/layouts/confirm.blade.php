@@ -56,10 +56,8 @@
 </head>
 <body>
 <img src="http://app.mycryptopoolmirror.com/frontend/images/logo.png" alt="" class="logo">
-<h1 class="mail-title">Hi admin, <a href="mailto:{{$data['email']}}">{{$data['name']}}</a> send you a message for help.</h1>
+<h1 class="mail-title">Hi {{$data['name']}}, Please active your account by clicking the confirm button.</h1>
 
-<p class="message">{{$data['message']}}</p>
-
-<a href="mailto:{{$data['email']}}" class="response">Response</a>
+<a href="{{URL::to('/email')}}/{{$data['token']}}" class="response">Confirm</a>
 </body>
 </html>
