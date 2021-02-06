@@ -37,6 +37,7 @@ class HomeController extends Controller
 
         return view('home', [
             'user_data' => $data,
+
         ]);
     }
 
